@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "14": "^3.1.6",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/ejs": "^3.1.5",
@@ -32,10 +33,9 @@
   "name": "be",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"ts-node-dev --respawn index.ts"
+    "start": "ts-node-dev --respawn index.ts"
   },
   "keywords": [],
   "author": "",
