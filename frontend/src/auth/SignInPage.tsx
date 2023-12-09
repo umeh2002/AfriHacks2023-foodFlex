@@ -5,8 +5,8 @@ const SignInPage = () => {
   return (
     <>
       <div className="bg-[#f0f1f7] w-[100%] min-h-[100vh] flex justify-center flex-col items-center ">
-        <Logo />
-        <div className="w-[400px] min-h-[200px] bg-[white] mt-[20px] rounded p-6 ">
+        <Logo clr="red" />
+        <div className="w-[400px] S425:w-[300px] min-h-[200px] bg-[white] mt-[20px] rounded p-6 ">
           <div className="text-[16px] mt-[10px] text-center font-semibold text-[#1E1E1E]">
             Sign In
           </div>
@@ -41,7 +41,7 @@ const SignInPage = () => {
             <div className="text-[10px] text-gray-500 text-center">
               Don't have an account?
             </div>
-            <Link to="/sign-in">
+            <Link to="/register">
               <div className="text-[13px] text-red-600 font-semibold">
                 Register
               </div>

@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
 import RegisterPage from "../auth/RegisterPage";
 import SignInPage from "../auth/SignInPage";
+import HomePage from "../pages/HomePage";
+import CartPage from "../pages/CartPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -18,6 +20,10 @@ export const MainRouter = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <SignInPage />,
+    element: <HomePage />,
+  },
+  {
+    path: "/cart-page",
+    element: <CartPage />,
   },
 ]);
