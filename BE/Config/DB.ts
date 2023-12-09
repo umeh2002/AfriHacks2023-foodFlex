@@ -6,6 +6,7 @@ const url:string =process.env.APPLICATION_URL!
 
 const db=()=>{
     mongoose.connect(url).then(()=>{
+        console.log("")
         console.log("db connection established")
     })
 }
