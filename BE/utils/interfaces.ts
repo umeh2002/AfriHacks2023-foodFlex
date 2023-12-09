@@ -6,4 +6,5 @@ export interface iAuthData extends mongoose.Document {
     password: string;
     phoneNumber: number;
     BVN: number;
+    verified:boolean
   }

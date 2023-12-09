@@ -16,14 +16,20 @@ export const authModel: Schema<iAuthData> = new mongoose.Schema({
   },
   phoneNumber: {
     type: Number,
-    min: 11,
-    max: 11,
+    unique:true,
+    // minlength: 11,
+    maxlength: 11,
   },
   BVN: {
     type: Number,
-    min: 11,
-    max: 11,
+    unique:true,
+    minlength: 11,
+    maxlength: 11,
   },
-});
+  verified:{
+    type:Boolean,
+    default:false
+  }
+},{timestamps:true});
 
 export default mongoose.model<iAuthData>("auths", authModel);
