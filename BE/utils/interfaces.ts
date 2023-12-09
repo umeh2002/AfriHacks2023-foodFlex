@@ -7,4 +7,9 @@ export interface iAuthData extends mongoose.Document {
     phoneNumber: number;
     BVN: number;
     verified:boolean
+    creditWallet:number,
+    loan:number
+    cart:Array<{}>,
+    history:Array<{}>,
+    token:string
   }
