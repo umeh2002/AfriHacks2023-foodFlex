@@ -1,11 +1,29 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { iAuthData } from "../utils/interfaces";
 
-interface iAuth {
-  userName: string;
-  email: string;
-  password: string;
-  phoneNumber: number;
-  BVN: number;
-}
+export const authModel: Schema<iAuthData> = new mongoose.Schema({
+  userName: {
+    type: String,
+  },
+  email: {
+    type: String,
+    unique: true,
+    trim: true,
+    lowercase: true,
+  },
+  password: {
+    type: String,
+  },
+  phoneNumber: {
+    type: Number,
+    min: 11,
+    max: 11,
+  },
+  BVN: {
+    type: Number,
+    min: 11,
+    max: 11,
+  },
+});
 
-export interface iAuthData extends iAuth, mongoose.Document {}
+export default mongoose.model<iAuthData>("auths", authModel);
