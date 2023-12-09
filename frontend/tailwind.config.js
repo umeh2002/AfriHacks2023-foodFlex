@@ -7,6 +7,11 @@ export default {
         Regular: "Poppins-Regular",
         Bold: "Poppins-Bold",
       },
+      screens: {
+        S425: { max: "425px" },
+        S670: { max: "670px" },
+        S500: { max: "500px" },
+      },
     },
   },
   plugins: [],
