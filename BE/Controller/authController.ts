@@ -9,7 +9,7 @@ try {
     const {userName,email,password,phoneNumber,BVN} = req.body
     const salt = await bcrypt.genSalt(10)
     const hashed = await bcrypt.hash(password,salt)
-    const token = jwt.sign({hashed},"secretToken")
+    const Token = jwt.sign({hashed},"secretToken")
     const NGN = ("+234")
     const newUser = await authModel.create({
         userName,
@@ -17,9 +17,10 @@ try {
         password:hashed,
         phoneNumber:NGN.concat(phoneNumber),
         BVN,
-        token
+        token:Token
     }) 
 
+    const tokenID = jwt.sign({id:newUser._id},"token")
     return res.status(HTTP.CREATED).json({
         message:"User created",
         data:newUser
@@ -30,4 +31,74 @@ try {
         data: error.message
     })
 }
+}
+
+export const verifyUser =async(req:Request,res:Response):Promise<Response>=>{
+    try {
+        const {token} = req.params
+
+        const userID :any= jwt.verify(token,"token",(error:any,payload:any)=>{
+            if(error){
+                return error
+            }else{
+                return payload
+            }
+        })
+
+        const user = await authModel.findByIdAndUpdate(
+            userID.id,
+            {
+                token:"",
+                verified:true
+            },
+            {new:true}
+        )
+        return res.status(HTTP.OK).json({
+            message:"User has been verified",
+            data:user
+        })
+    } catch (error) {
+        return res.status(HTTP.BAD_REQUEST).json({
+            message:"error verifying user",
+            data: error.message
+        })
+    }
+} 
+
+export const signUserIn = async(req:Request,res:Response):Promise<Response>=>{
+    try {
+        const {email,password} = req.body
+        const user = await authModel.findOne({email})
+        if(user){
+            const confirm = await bcrypt.compare(password,user.password)
+            if(confirm){
+                if(user.verified && user.token === ""){
+                    const mainToken = jwt.sign({id:user._id, email:user?.email},"realToken")
+                    return res.status(HTTP.OK).json({
+                        message:`Welcome back`,
+                        data:mainToken
+                    })
+                }else{
+                    return res.status(HTTP.BAD_REQUEST).json({
+                        message:"please make sure you are verified"
+                    })
+                }
+
+            }else{
+                return res.status(HTTP.BAD_REQUEST).json({
+                    message:"Incorrect password"
+                })
+            }
+        }else{
+            return res.status(HTTP.NOT_FOUND).json({
+                message:"Email not found"
+            })
+        }
+    } catch (error) {
+        return res.status(HTTP.BAD_REQUEST).json({
+            message:"Error signing in user"
+
+
+        })
+    }
 }
