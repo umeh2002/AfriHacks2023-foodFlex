@@ -4,7 +4,7 @@ import { FaRegArrowAltCircleUp } from "react-icons/fa";
 const Carts = () => {
   return (
     <>
-      <div className="w-full border-b-2 flex">
+      <div className="w-full border-b-2 flex">  
         <div className="border-r-2 w-[320px] flex items-center">
           <div className="w-full p-3 flex">
             <div className="w-[60px] h-[60px] rounded-md bg-slate-100">
