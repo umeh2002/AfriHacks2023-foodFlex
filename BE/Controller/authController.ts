@@ -1,104 +1,117 @@
-import bcrypt from "bcrypt"
-import { Request, Response } from "express"
-import jwt from "jsonwebtoken"
-import authModel from "../model/authModel"
-import { HTTP } from "../error/mainError"
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import authModel from "../model/authModel";
+import { HTTP } from "../error/mainError";
 
-export const registerUser = async(req:Request,res:Response):Promise<Response>=>{
-try {
-    const {userName,email,password,phoneNumber,BVN} = req.body
-    const salt = await bcrypt.genSalt(10)
-    const hashed = await bcrypt.hash(password,salt)
-    const Token = jwt.sign({hashed},"secretToken")
-    const NGN = ("+234")
+export const registerUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { userName, email, password, phoneNumber, BVN } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(password, salt);
+    const Token = jwt.sign({ hashed }, "secretToken");
+    const NGN = "+234";
     const newUser = await authModel.create({
-        userName,
-        email,
-        password:hashed,
-        phoneNumber:NGN.concat(phoneNumber),
-        BVN,
-        token:Token
-    }) 
+      userName,
+      email,
+      password: hashed,
+      phoneNumber: NGN.concat(phoneNumber),
+      BVN,
+      token: Token,
+    });
 
-    const tokenID = jwt.sign({id:newUser._id},"token")
+    const tokenID = jwt.sign({ id: newUser._id }, "token");
     return res.status(HTTP.CREATED).json({
-        message:"User created",
-        data:newUser
-    })
-} catch (error:any) {
+      message: "User created",
+      data: newUser,
+    });
+  } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
-        message:"Couldn't create user",
-        data: error.message
-    })
-}
-}
+      message: "Couldn't create user",
+      data: error.message,
+    });
+  }
+};
 
-export const verifyUser =async(req:Request,res:Response):Promise<Response>=>{
-    try {
-        const {token} = req.params
+export const verifyUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { token } = req.params;
 
-        const userID :any= jwt.verify(token,"token",(error:any,payload:any)=>{
-            if(error){
-                return error
-            }else{
-                return payload
-            }
-        })
-
-        const user = await authModel.findByIdAndUpdate(
-            userID.id,
-            {
-                token:"",
-                verified:true
-            },
-            {new:true}
-        )
-        return res.status(HTTP.OK).json({
-            message:"User has been verified",
-            data:user
-        })
-    } catch (error) {
-        return res.status(HTTP.BAD_REQUEST).json({
-            message:"error verifying user",
-            data: error.message
-        })
-    }
-} 
-
-export const signUserIn = async(req:Request,res:Response):Promise<Response>=>{
-    try {
-        const {email,password} = req.body
-        const user = await authModel.findOne({email})
-        if(user){
-            const confirm = await bcrypt.compare(password,user.password)
-            if(confirm){
-                if(user.verified && user.token === ""){
-                    const mainToken = jwt.sign({id:user._id, email:user?.email},"realToken")
-                    return res.status(HTTP.OK).json({
-                        message:`Welcome back`,
-                        data:mainToken
-                    })
-                }else{
-                    return res.status(HTTP.BAD_REQUEST).json({
-                        message:"please make sure you are verified"
-                    })
-                }
-
-            }else{
-                return res.status(HTTP.BAD_REQUEST).json({
-                    message:"Incorrect password"
-                })
-            }
-        }else{
-            return res.status(HTTP.NOT_FOUND).json({
-                message:"Email not found"
-            })
+    const userID: any = jwt.verify(
+      token,
+      "token",
+      (error: any, payload: any) => {
+        if (error) {
+          return error;
+        } else {
+          return payload;
         }
-    } catch (error) {
+      }
+    );
+
+    const user = await authModel.findByIdAndUpdate(
+      userID.id,
+      {
+        token: "",
+        verified: true,
+      },
+      { new: true }
+    );
+    return res.status(HTTP.OK).json({
+      message: "User has been verified",
+      data: user,
+    });
+  } catch (error: any) {
+    return res.status(HTTP.BAD_REQUEST).json({
+      message: "error verifying user",
+      data: error.message,
+    });
+  }
+};
+
+export const signUserIn = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { email, password } = req.body;
+    const user = await authModel.findOne({ email });
+    if (user) {
+      const confirm = await bcrypt.compare(password, user.password);
+      if (confirm) {
+        if (user.verified && user.token === "") {
+          const mainToken = jwt.sign(
+            { id: user._id, email: user?.email },
+            "realToken"
+          );
+          return res.status(HTTP.OK).json({
+            message: `Welcome back`,
+            data: mainToken,
+          });
+        } else {
+          return res.status(HTTP.BAD_REQUEST).json({
+            message: "please make sure you are verified",
+          });
+        }
+      } else {
         return res.status(HTTP.BAD_REQUEST).json({
-            message:"Error signing in user"
-
-
-        })
+          message: "Incorrect password",
+        });
+      }
+    } else {
+      return res.status(HTTP.NOT_FOUND).json({
+        message: "Email not found",
+      });
     }
-}
+  } catch (error: any) {
+    return res.status(HTTP.BAD_REQUEST).json({
+      message: "Error signing in user",
+    });
+  }
+};
