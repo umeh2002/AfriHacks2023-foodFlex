@@ -76,7 +76,7 @@ export const verifyUser = async (
   try {
     const { token } = req.params;
 
-    const userID: any = jwt.verify(
+    const userId: any = jwt.verify(
       token,
       "token",
       (error: any, payload: any) => {
