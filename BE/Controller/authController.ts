@@ -65,6 +65,7 @@ export const verifyUser = async (
       },
       { new: true }
     );
+
     return res.status(HTTP.OK).json({
       message: "User has been verified",
       data: user,
@@ -114,6 +115,7 @@ export const signUserIn = async (
   } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
       message: "Error signing in user",
+      data: error.message,
     });
   }
 };
@@ -129,9 +131,10 @@ export const deleteUser = async (
       message: "User deleted successfully",
       data: removeUser,
     });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
       message: "Error deleting user",
+      data: error.message,
     });
   }
 };
@@ -147,9 +150,10 @@ export const FindOneUser = async (
       message: "User found successfully",
       data: findOne,
     });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(HTTP.NOT_FOUND).json({
       message: "Error finding user",
+      data: error.message,
     });
   }
 };
@@ -164,9 +168,10 @@ export const FindAllUser = async (
       message: "Users found successfully",
       data: findAll,
     });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(HTTP.NOT_FOUND).json({
       message: "Error finding all user",
+      data: error.message,
     });
   }
 };
