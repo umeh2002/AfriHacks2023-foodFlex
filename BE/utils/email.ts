@@ -4,6 +4,7 @@ import path from "path"
 import ejs from 'ejs'
 
 
+
 const Google_ID: string =
   "515997591712-h3d7e0p17ipjumbuusqs93f5boldtucr.apps.googleusercontent.com";
 const Google_SECRET: string = "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";
@@ -17,7 +18,7 @@ oAuth.setCredentials({ access_token: Google_REFRESH });
 
 const URL : string = "http://localhost:2738"
 
-export const sendMail = async (user:any, tokenID:any)=>{
+export const sendMail = async (newUser:any, tokenID:any)=>{
   try {
     const getAccess:any = await oAuth.getAccessToken()
     const transport = nodemailer.createTransport({
@@ -32,14 +33,27 @@ export const sendMail = async (user:any, tokenID:any)=>{
       }
     })
 
-    const userDetails = {
-      name:user?.name,
-      email:user?.email,
+    const userInfo = {
+      name:newUser?.name,
+      email:newUser?.email,
       url:`${URL}/${tokenID}/verify`
     }
 
-    const data = path.join(__dirname."")
-  } catch (error) {
-    
+    const data = path.join(__dirname,"../views/verificationMail.ejs")
+
+    const mainData = await ejs.renderFile(data,userInfo)
+    const mail = {
+      from:"verify <elizabethokorie407@gmail.com>",
+      to:newUser.email,
+      subject:"Verify",
+      html:mainData
+    }
+    transport.sendMail(mail).then(()=>{
+      console.log("This mail went through!!")
+    }).catch((error:any)=>{
+      console.log(error)
+    })
+  } catch (error:any) {
+    throw error
   }
 }

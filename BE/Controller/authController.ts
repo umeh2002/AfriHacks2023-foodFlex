@@ -59,7 +59,7 @@ export const verifyUser =async(req:Request,res:Response):Promise<Response>=>{
             message:"User has been verified",
             data:user
         })
-    } catch (error) {
+    } catch (error:any) {
         return res.status(HTTP.BAD_REQUEST).json({
             message:"error verifying user",
             data: error.message
