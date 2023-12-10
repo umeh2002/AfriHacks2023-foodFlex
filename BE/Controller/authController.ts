@@ -2,55 +2,6 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import authModel from "../model/authModel";
-import { HTTP } from "../error/mainError";
-import { sendMail } from "../utils/email";
-
-export const registerUser = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { userName, email, password, phoneNumber, BVN } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password, salt);
-    const newUser = await authModel.create({
-      userName,
-      email,
-      password: hashed,
-      phoneNumber,
-      BVN,
-    });
-
-    const tokenID = jwt.sign({ id: newUser._id }, "token");
-    await sendMail(newUser, tokenID).then(() => {
-      console.log("Mail sent successfully!!");
-    });
-    return res.status(HTTP.CREATED).json({
-      message: "User created",
-      data: newUser,
-      tokenID,
-    });
-  } catch (error: any) {
-    const user = await authModel.findByIdAndUpdate(
-      userID.id,
-      {
-        token: "",
-        verified: true,
-      },
-      { new: true }
-    );
-
-    return res.status(HTTP.OK).json({
-      message: "User has been verified",
-      data: user,
-    });
-  } catch (error: any) {
-    return res.status(HTTP.BAD_REQUEST).json({
-      message: "error verifying user",
-      data: error.message,
-    });
-  }
-};
 
 export const signUserIn = async (
   req: Request,
@@ -89,25 +40,6 @@ export const signUserIn = async (
   } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
       message: "Error signing in user",
-      data: error.message,
-    });
-  }
-};
-
-export const deleteUser = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { userID } = req.params;
-    const removeUser = await authModel.findByIdAndDelete(userID);
-    return res.status(HTTP.OK).json({
-      message: "User deleted successfully",
-      data: removeUser,
-    });
-  } catch (error: any) {
-    return res.status(HTTP.BAD_REQUEST).json({
-      message: "Error deleting user",
       data: error.message,
     });
   }
