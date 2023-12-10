@@ -3,27 +3,29 @@ import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 import authModel from "../model/authModel"
 import { HTTP } from "../error/mainError"
+import { sendMail } from "../utils/email"
 
 export const registerUser = async(req:Request,res:Response):Promise<Response>=>{
 try {
     const {userName,email,password,phoneNumber,BVN} = req.body
     const salt = await bcrypt.genSalt(10)
     const hashed = await bcrypt.hash(password,salt)
-    const Token = jwt.sign({hashed},"secretToken")
-    const NGN = ("+234")
     const newUser = await authModel.create({
         userName,
         email,
         password:hashed,
-        phoneNumber:NGN.concat(phoneNumber),
-        BVN,
-        token:Token
+        phoneNumber,
+        BVN
     }) 
 
     const tokenID = jwt.sign({id:newUser._id},"token")
+    await sendMail(newUser,tokenID).then(()=>{
+        console.log("Mail sent successfully!!")
+    })
     return res.status(HTTP.CREATED).json({
         message:"User created",
-        data:newUser
+        data:newUser,
+        tokenID
     })
 } catch (error:any) {
     return res.status(HTTP.BAD_REQUEST).json({
@@ -99,6 +101,48 @@ export const signUserIn = async(req:Request,res:Response):Promise<Response>=>{
             message:"Error signing in user"
 
 
+        })
+    }
+}
+
+export const deleteUser = async(req:Request,res:Response):Promise<Response>=>{
+    try {
+        const {userID} = req.params
+        const removeUser = await authModel.findByIdAndDelete(userID)
+         return res.status(HTTP.OK).json({
+            message:"User deleted successfully",
+            data:removeUser
+         })
+       } catch (error) {
+        return res.status(HTTP.BAD_REQUEST).json({
+            message:"Error deleting user" 
+        })
+    }
+}
+export const FindOneUser = async(req:Request,res:Response):Promise<Response>=>{
+    try {
+        const {userID} = req.params
+        const findOne = await authModel.findById(userID)
+         return res.status(HTTP.OK).json({
+            message:"User found successfully",
+            data:findOne
+         })
+       } catch (error) {
+        return res.status(HTTP.NOT_FOUND).json({
+            message:"Error finding user" 
+        })
+    }
+}
+export const FindAllUser = async(req:Request,res:Response):Promise<Response>=>{
+    try {
+        const findAll = await authModel.find()
+         return res.status(HTTP.OK).json({
+            message:"Users found successfully",
+            data:findAll
+         })
+       } catch (error) {
+        return res.status(HTTP.NOT_FOUND).json({
+            message:"Error finding all user" 
         })
     }
 }
