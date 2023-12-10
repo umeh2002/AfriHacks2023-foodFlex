@@ -7,6 +7,7 @@ import CartPage from "../pages/CartPage";
 import HistoryPage from "../pages/HistoryPage";
 import BINpage from "../pages/BINpage";
 import SeekLoanScreen from "../screens/SeekLoanScreen";
+import DetailedPage from "../pages/DetailedPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -40,5 +41,9 @@ export const MainRouter = createBrowserRouter([
   {
     path: "/seek-loan",
     element: <SeekLoanScreen />,
+  },
+  {
+    path: "/detailedpage",
+    element: <DetailedPage />,
   },
 ]);
