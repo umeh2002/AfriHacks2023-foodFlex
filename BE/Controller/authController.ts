@@ -10,15 +10,17 @@ try {
     const {userName,email,password,phoneNumber,BVN} = req.body
     const salt = await bcrypt.genSalt(10)
     const hashed = await bcrypt.hash(password,salt)
+    const tokenID = jwt.sign({id:hashed},"token")
+
     const newUser = await authModel.create({
         userName,
         email,
         password:hashed,
         phoneNumber,
-        BVN
+        BVN,
+        token:tokenID
     }) 
 
-    const tokenID = jwt.sign({id:newUser._id},"token")
     await sendMail(newUser,tokenID).then(()=>{
         console.log("Mail sent successfully!!")
     })
@@ -37,18 +39,12 @@ try {
 
 export const verifyUser =async(req:Request,res:Response):Promise<Response>=>{
     try {
-        const {token} = req.params
+        const {userID} = req.params
+        const user = await authModel.findById(userID)
 
-        const userID :any= jwt.verify(token,"token",(error:any,payload:any)=>{
-            if(error){
-                return error
-            }else{
-                return payload
-            }
-        })
-
-        const user = await authModel.findByIdAndUpdate(
-            userID.id,
+       if(user?.verified === false && user?.token !== ""){
+        const verifieduser = await authModel.findByIdAndUpdate(
+            user?._id,
             {
                 token:"",
                 verified:true
@@ -57,8 +53,15 @@ export const verifyUser =async(req:Request,res:Response):Promise<Response>=>{
         )
         return res.status(HTTP.OK).json({
             message:"User has been verified",
-            data:user
+            data:verifieduser
         })
+       }else{
+        return res.status(HTTP.OK).json({
+            message:"User has been verified"
+        })
+       }
+
+        
     } catch (error:any) {
         return res.status(HTTP.BAD_REQUEST).json({
             message:"error verifying user",
