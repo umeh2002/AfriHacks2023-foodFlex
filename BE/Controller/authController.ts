@@ -31,32 +31,6 @@ export const registerUser = async (
       tokenID,
     });
   } catch (error: any) {
-    return res.status(HTTP.BAD_REQUEST).json({
-      message: "Couldn't create user",
-      data: error.message,
-    });
-  }
-};
-
-export const verifyUser = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { token } = req.params;
-
-    const userID: any = jwt.verify(
-      token,
-      "token",
-      (error: any, payload: any) => {
-        if (error) {
-          return error;
-        } else {
-          return payload;
-        }
-      }
-    );
-
     const user = await authModel.findByIdAndUpdate(
       userID.id,
       {
