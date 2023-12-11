@@ -21,9 +21,9 @@ const AboutPage = () => {
             </div>
             </div>
     
-        <div className="w-[60%] md:w-[40%] ">
+        <div className="w-[60%] max-md:w-[40%] ">
             <p className="text-[26px] tracking-wider text-[#808080] font-extrabold">about <span className="text-[red]">FOODFLEX</span></p>
-            <p className="text-[15px] md:text-[14px] leading-10 md:leading-7">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos, sapiente vero ad quas, maxime molestias nostrum placeat delectus aliquid adipisci obcaecati quod dolor a saepe totam optio iusto error fugiat. Laboriosam sed aliquid possimus dolorum a consectetur mollitia recusandae ipsum est ea temporibus necessitatibus exercitationem, magni sit laborum vitae aliquam.</p>
+            <p className="text-[15px] md:text-[14px] md:leading-7">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos, sapiente vero ad quas, maxime molestias nostrum placeat delectus aliquid adipisci obcaecati quod dolor a saepe totam optio iusto error fugiat. Laboriosam sed aliquid possimus dolorum a consectetur mollitia recusandae ipsum est ea temporibus necessitatibus exercitationem, magni sit laborum vitae aliquam.</p>
         </div>
        
     </div>
