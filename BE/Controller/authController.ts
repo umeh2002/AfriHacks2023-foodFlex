@@ -1,81 +1,155 @@
-import bcrypt from "bcrypt";
+import { compare, genSalt, hash } from "bcrypt";
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import authModel from "../model/authModel";
-import { HTTP } from "../error/mainError";
 import { sendMail } from "../utils/email";
+import { sign, verify } from "jsonwebtoken";
+import { envConfig } from "../Config/environConfig";
+import crypto from "crypto";
 
 export const registerUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const { userName, email, password, phoneNumber, BVN } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password, salt);
-    const newUser = await authModel.create({
+    const { userName, email, password, phoneNo, BVN } = req.body;
+    const salted = await genSalt(10);
+    const hashed = await hash(password, salted);
+    const token = crypto.randomUUID();
+    const NGN = "+234";
+    const user = await authModel.create({
       userName,
       email,
       password: hashed,
-      phoneNumber,
+      phoneNo: NGN.concat(phoneNo),
       BVN,
+      token,
     });
 
-    const tokenID = jwt.sign({ id: newUser._id }, "token");
-    await sendMail(newUser, tokenID).then(() => {
-      console.log("Mail sent successfully!!");
+    sendMail(user).then(() => {
+      console.log("Mail sent to registered user...!");
     });
-    return res.status(HTTP.CREATED).json({
-      message: "User created",
-      data: newUser,
-      tokenID,
+
+    return res.status(201).json({
+      message: "Successfully Registered",
+      data: user,
     });
   } catch (error: any) {
-    return res.status(HTTP.BAD_REQUEST).json({
-      message: "error verifying user",
-      data: error.message,
+    return res.status(500).json({
+      message: error.message,
     });
   }
 };
 
-export const signUserIn = async (
+export const verifyUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { token } = req.params;
+    const getUserID: any = verify(
+      token,
+      envConfig.TOKEN_SECRET,
+      (err, payload) => {
+        if (err) {
+          throw new Error();
+        } else {
+          return payload;
+        }
+      }
+    );
+
+    await authModel.findByIdAndUpdate(
+      getUserID.id,
+      {
+        token: "",
+        verified: true,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "User has been verified",
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const signInUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const { email, password } = req.body;
     const user = await authModel.findOne({ email });
+
     if (user) {
-      const confirm = await bcrypt.compare(password, user.password);
-      if (confirm) {
+      const validPassword = await compare(password, user.password);
+      if (validPassword) {
         if (user.verified && user.token === "") {
-          const mainToken = jwt.sign(
-            { id: user._id, email: user?.email },
-            "realToken"
-          );
-          return res.status(HTTP.OK).json({
-            message: `Welcome back`,
-            data: mainToken,
+          const token = sign({ id: user._id }, envConfig.TOKEN_SECRET);
+          return res.status(201).json({
+            message: `Welcome Back ${user.userName}`,
+            data: token,
           });
         } else {
-          return res.status(HTTP.BAD_REQUEST).json({
-            message: "please make sure you are verified",
+          return res.status(400).json({
+            message: "You is not yet verified",
           });
         }
       } else {
-        return res.status(HTTP.BAD_REQUEST).json({
-          message: "Incorrect password",
+        return res.status(400).json({
+          message: "Password is invalid",
         });
       }
     } else {
-      return res.status(HTTP.NOT_FOUND).json({
-        message: "Email not found",
+      return res.status(400).json({
+        message: "This user is not in our record",
       });
     }
   } catch (error: any) {
-    return res.status(HTTP.BAD_REQUEST).json({
-      message: "Error signing in user",
-      data: error.message,
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const viewOneUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { userID } = req.params;
+
+    const user = await authModel.findById(userID);
+
+    return res.status(200).json({
+      message: "User found",
+      data: user,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const viewAllUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const user = await authModel.find();
+
+    return res.status(200).json({
+      message: "All Users found",
+      data: user,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      message: error.message,
     });
   }
 };
@@ -86,52 +160,15 @@ export const deleteUser = async (
 ): Promise<Response> => {
   try {
     const { userID } = req.params;
-    const removeUser = await authModel.findByIdAndDelete(userID);
-    return res.status(HTTP.OK).json({
-      message: "User deleted successfully",
-      data: removeUser,
-    });
-  } catch (error: any) {
-    return res.status(HTTP.BAD_REQUEST).json({
-      message: "Error deleting user",
-      data: error.message,
-    });
-  }
-};
 
-export const FindOneUser = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { userID } = req.params;
-    const findOne = await authModel.findById(userID);
-    return res.status(HTTP.OK).json({
-      message: "User found successfully",
-      data: findOne,
-    });
-  } catch (error: any) {
-    return res.status(HTTP.NOT_FOUND).json({
-      message: "Error finding user",
-      data: error.message,
-    });
-  }
-};
+    await authModel.findByIdAndDelete(userID);
 
-export const FindAllUser = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  try {
-    const findAll = await authModel.find();
-    return res.status(HTTP.OK).json({
-      message: "Users found successfully",
-      data: findAll,
+    return res.status(202).json({
+      message: "Successfully Deleted Users",
     });
   } catch (error: any) {
-    return res.status(HTTP.NOT_FOUND).json({
-      message: "Error finding all user",
-      data: error.message,
+    return res.status(500).json({
+      message: error.message,
     });
   }
 };

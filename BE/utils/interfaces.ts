@@ -1,15 +1,13 @@
-import mongoose from "mongoose"
+import { Document } from "mongoose";
 
-export interface iAuthData extends mongoose.Document {
-    userName: string;
-    email: string;
-    password: string;
-    phoneNumber: number;
-    BVN: number;
-    verified:boolean
-    creditWallet:number,
-    loan:number
-    cart:Array<{}>,
-    history:Array<{}>,
-    token:string
-  }
+interface iAuth {
+  userName: string;
+  email: string;
+  password: string;
+  phoneNo: string;
+  BVN: string;
+  token: string;
+  verified: boolean;
+}
+
+export interface iAuthData extends iAuth, Document {}

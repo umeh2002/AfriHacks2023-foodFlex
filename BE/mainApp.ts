@@ -1,26 +1,22 @@
 import cors from "cors";
-import express, { Application, Request, Response } from "express";
+import { Application, Request, Response, json } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import auth from "./router/authRouter"
-export const mainApp = (app: Application) => {
-  app.use(express.json());
-  app.use(cors());
+import auth from "./router/authRouter";
+
+export const appConfig = (app: Application) => {
+  app.use(json()).use(cors()).use(helmet()).use(morgan("dev"));
   app.set("view engine", "ejs");
-  app.use(morgan("dev"));
-  app.use(helmet());
+  app.use("/api", auth);
 
-  app.use("/api",auth)
-
-  app.use("/", async (req: Request, res: Response) => {
+  app.get("/", (req: Request, res: Response) => {
     try {
       return res.status(200).json({
-        message: "welcome to foodFlex APIs!!",
+        message: "Food Flex APIs 🍑🍍🍇",
       });
     } catch (error: any) {
-      return res.status(404).json({
-        message: "error",
-        data: error.message,
+      return res.status(500).json({
+        message: error.message,
       });
     }
   });
