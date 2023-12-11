@@ -8,6 +8,7 @@ import HistoryPage from "../pages/HistoryPage";
 import BINpage from "../pages/BINpage";
 import SeekLoanScreen from "../screens/SeekLoanScreen";
 import DetailedPage from "../pages/DetailedPage";
+import PrivateRouter from "./PrivateRouter";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -24,15 +25,27 @@ export const MainRouter = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <HomePage />,
+    element: (
+      <PrivateRouter>
+        <HomePage />
+      </PrivateRouter>
+    ),
   },
   {
     path: "/cart-page",
-    element: <CartPage />,
+    element: (
+      <PrivateRouter>
+        <CartPage />
+      </PrivateRouter>
+    ),
   },
   {
     path: "/history-page",
-    element: <HistoryPage />,
+    element: (
+      <PrivateRouter>
+        <HistoryPage />
+      </PrivateRouter>
+    ),
   },
   {
     path: "/BIN-page",

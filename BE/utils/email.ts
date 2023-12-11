@@ -32,7 +32,7 @@ export const sendMail = async (user: any) => {
     const passedData = {
       userName: user?.userName,
       email: user?.email,
-      url: `http://localhost:1234/api/${token}/verify`,
+      url: `http://localhost:5173/${token}/verify`,
     };
 
     const locateEjsFile = join(__dirname, "../views/verificationMail.ejs");
