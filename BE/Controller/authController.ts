@@ -31,20 +31,6 @@ export const registerUser = async (
       tokenID,
     });
   } catch (error: any) {
-    const user = await authModel.findByIdAndUpdate(
-      userID.id,
-      {
-        token: "",
-        verified: true,
-      },
-      { new: true }
-    );
-
-    return res.status(HTTP.OK).json({
-      message: "User has been verified",
-      data: user,
-    });
-  } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
       message: "error verifying user",
       data: error.message,
