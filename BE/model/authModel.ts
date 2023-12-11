@@ -1,56 +1,40 @@
-import mongoose, { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 import { iAuthData } from "../utils/interfaces";
 
-export const authModel: Schema<iAuthData> = new mongoose.Schema(
+const authModel = new Schema<iAuthData>(
   {
     userName: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
-      unique: true,
+      required: true,
       trim: true,
       lowercase: true,
+      unique: true,
     },
     password: {
       type: String,
+      required: true,
     },
-    phoneNumber: {
-      type: Number,
-      unique: true,
-      // minlength: 11,
-      maxlength: 11,
+    phoneNo: {
+      type: String,
+      required: true,
     },
     BVN: {
-      type: Number,
-      unique: true,
-      minlength: 11,
-      maxlength: 11,
-    },
-    verified: {
-      type: Boolean,
-      default: false,
+      type: String,
+      required: true,
     },
     token: {
       type: String,
     },
-    loan: {
-      type: Number,
+    verified: {
+      default: false,
+      type: Boolean,
     },
-    creditWallet: {
-      type: Number,
-    },
-    cart: {
-      type: [String],
-    },
-    history: [
-      {
-        type: mongoose.Types.ObjectId,
-        rref: "history",
-      },
-    ],
   },
   { timestamps: true }
 );
 
-export default mongoose.model<iAuthData>("auths", authModel);
+export default model<iAuthData>("food-flex-auths", authModel);

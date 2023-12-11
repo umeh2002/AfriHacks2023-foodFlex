@@ -1,29 +1,24 @@
 import express, { Application } from "express";
-import env from "dotenv";
-import { mainApp } from "./mainApp";
-import db from "./Config/DB";
+import { envConfig } from "./Config/environConfig";
+import { appConfig } from "./mainApp";
+import { DbConfig } from "./Config/DB";
 
-env.config();
-
+const port: number = parseInt(envConfig.PORT);
 const app: Application = express();
-mainApp(app);
 
-const realPort = parseInt(process.env.PORT!);
-const port: number = realPort;
+appConfig(app);
 
-const server = app.listen(process.env.PORT || port, () => {
-  console.log("")
-  console.log("server listening on port", port);
-  db()
-});
-
-process.on("unhandledRejection", (reason: any) => {
-  console.log("server is shutting down due to unhandle rejection", reason);
+const server = app.listen(envConfig.PORT || port, () => {
+  DbConfig();
 });
 
 process.on("uncaughtException", (error: any) => {
-  console.log("server is shutting down due to uncaught exception", error);
+  console.log("uncaughtException: ", error);
+  process.exit(1);
+});
 
+process.on("unhandledRejection", (reason: any) => {
+  console.log("unhandledRejection: ", reason);
   server.close(() => {
     process.exit(1);
   });

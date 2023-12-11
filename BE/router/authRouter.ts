@@ -1,15 +1,20 @@
-import express, { Router } from "express"
-import { FindAllUser, FindOneUser, deleteUser, registerUser, signUserIn, verifyUser } from "../Controller/authController"
-// import { registerUserValidator, signInUserValidator } from "../utils/validator"
-// import validatorHolder from "../utils/validatorHolder"
+import { Router } from "express";
+import {
+  deleteUser,
+  registerUser,
+  signInUser,
+  verifyUser,
+  viewAllUser,
+  viewOneUser,
+} from "../Controller/authController";
 
-const router:Router = express.Router()
+const auth: Router = Router();
 
-router.route("/register").post(registerUser)
-router.route("/sign-in").post(signUserIn)
-router.route("/:userID/delete").delete(deleteUser)
-router.route("/:userID/find-one").get(FindOneUser)
-router.route("/find-all").get(FindAllUser)
-router.route("/:userID/verify").patch(verifyUser)
+auth.route("/register").post(registerUser);
+auth.route("/sign-in").post(signInUser);
+auth.route("/:token/verify").get(verifyUser);
+auth.route("/:userID/view-one-user").get(viewOneUser);
+auth.route("/view-all-users").get(viewAllUser);
+auth.route("/:userID/delete").delete(deleteUser);
 
-export default router
+export default auth;

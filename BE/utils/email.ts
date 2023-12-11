@@ -1,59 +1,52 @@
-import nodemailer from "nodemailer";
+import { createTransport } from "nodemailer";
 import { google } from "googleapis";
-import path from "path";
-import ejs from "ejs";
+import { join } from "path";
+import { renderFile } from "ejs";
+import { envConfig } from "../Config/environConfig";
+import { sign } from "jsonwebtoken";
 
-const Google_ID: string =
-  "515997591712-h3d7e0p17ipjumbuusqs93f5boldtucr.apps.googleusercontent.com";
-const Google_SECRET: string = "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";
-const Google_REFRESH: string =
-  "1//04Wc0f74tqzFuCgYIARAAGAQSNwF-L9Irdku-fajBIhK05UXlrAh8sZzFFiHRk3NCbjfDlo3yf_1umhcXijr8A-2nl2p4YSXrNHY";
-const Google_URL: string = "https://developers.google.com/oauthplayground";
+const oAuth = new google.auth.OAuth2(
+  envConfig.GOOGLE_ID,
+  envConfig.GOOGLE_SECRET,
+  envConfig.GOOGLE_URL
+);
+oAuth.setCredentials({ access_token: envConfig.GOOGLE_REFRESH });
 
-const oAuth = new google.auth.OAuth2(Google_ID, Google_SECRET, Google_URL);
-oAuth.setCredentials({ access_token: Google_REFRESH });
-
-const URL: string = "http://localhost:2738";
-
-export const sendMail = async (newUser: any, tokenID: any) => {
+export const sendMail = async (user: any) => {
   try {
-    const getAccess: any = await oAuth.getAccessToken();
-    const transport = nodemailer.createTransport({
+    const accessToken: any = (await oAuth.getAccessToken()).token;
+    const transport = createTransport({
       service: "gmail",
       auth: {
         type: "OAuth2",
         user: "elizabethokorie407@gmail.com",
-        clientId: Google_ID,
-        clientSecret: Google_SECRET,
-        refreshToken: Google_REFRESH,
-        accessToken: getAccess.token,
+        clientId: envConfig.GOOGLE_ID,
+        clientSecret: envConfig.GOOGLE_SECRET,
+        refreshToken: envConfig.GOOGLE_REFRESH,
+        accessToken,
       },
     });
 
-    const userInfo = {
-      name: newUser?.name,
-      email: newUser?.email,
-      url: `${URL}/${tokenID}/verify`,
+    const token = sign({ id: user?._id }, envConfig.TOKEN_SECRET);
+
+    const passedData = {
+      userName: user?.userName,
+      email: user?.email,
+      url: `http://localhost:1234/api/${token}/verify`,
     };
 
-    const data = path.join(__dirname, "../views/verificationMail.ejs");
+    const locateEjsFile = join(__dirname, "../views/verificationMail.ejs");
+    const ejsData = await renderFile(locateEjsFile, passedData);
 
-    const mainData = await ejs.renderFile(data, userInfo);
-    const mail = {
-      from: "verify <elizabethokorie407@gmail.com>",
-      to: newUser.email,
-      subject: "Verify",
-      html: mainData,
+    const mailer = {
+      from: "Food Flex <elizabethokorie407@gmail.com>",
+      to: user?.email,
+      subject: `Verification Mail`,
+      html: ejsData,
     };
-    transport
-      .sendMail(mail)
-      .then(() => {
-        console.log("This mail went through!!");
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+
+    transport.sendMail(mailer);
   } catch (error: any) {
-    throw error;
+    console.error(error);
   }
 };
