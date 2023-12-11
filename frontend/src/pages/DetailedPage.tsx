@@ -44,9 +44,9 @@ const DetailedPage = () => {
                 +
               </div>
             </div>
-          <button className="  px-5 rounded-md flex items-center gap-4 bg-[#ff4251] duration-300 transition-all hover:scale-[1.06] hover:text-white max-md:gap-2" >
+          <button className="  px-5 rounded-md flex items-center justify-between bg-[#ff4251] duration-300 transition-all hover:scale-[1.06] hover:text-white  text-[14px]" >
             <FaCartShopping/>
-            <p className="max-md:text-[14px]">Add to Cart</p>
+            <p className="">Add to Cart</p>
           </button>
           </div>
           <br />
