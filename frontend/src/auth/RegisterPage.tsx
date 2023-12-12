@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerUserAPI } from "../api/authAPI";
 import Swal from "sweetalert2";
 import Loader from "../static/Loader";
+
 const RegisterPage = () => {
   const BVNInput = (e: any) => {
     const input = e.target;

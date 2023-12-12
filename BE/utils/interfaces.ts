@@ -10,4 +10,14 @@ interface iAuth {
   verified: boolean;
 }
 
+interface iProducts {
+  title: string;
+  inStock: number;
+  cost: number;
+  description: string;
+  image: string;
+  imageID: string;
+}
+
 export interface iAuthData extends iAuth, Document {}
+export interface iProductsData extends iProducts, Document {}

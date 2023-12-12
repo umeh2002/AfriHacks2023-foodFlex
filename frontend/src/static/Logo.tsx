@@ -7,7 +7,10 @@ interface iLogo {
 const Logo: FC<iLogo> = ({ clr }) => {
   return (
     <>
-      <Link to={"/"} className={`font-Bold text-${clr}-500 text-[30px] `}>
+      <Link
+        to={"/"}
+        className={`font-Bold text-${clr}-500 text-[${clr}] text-[30px] `}
+      >
         FOODFLEX
       </Link>
     </>

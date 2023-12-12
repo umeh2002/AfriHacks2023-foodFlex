@@ -1,6 +1,12 @@
+import { FC } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
-const SeekLoanScreen = () => {
+interface iToggle {
+  handleToggle: any;
+}
+
+const SeekLoanScreen: FC<iToggle> = ({ handleToggle }) => {
   const validInput = (e: any) => {
     const input = e.target;
     const inputValue = input.value;
@@ -9,11 +15,21 @@ const SeekLoanScreen = () => {
   };
   return (
     <>
-      <div className=" w-[100%] h-[100vh] flex justify-center items-center bg-slate-200">
-        <div className="bg-white w-[450px] flex flex-col items-center justify-center relative min-h-[200px] rounded-lg p-5">
+      <div
+        style={{
+          backgroundColor: "rgba(107, 34, 34, 0.5)",
+        }}
+        className="w-[100%] h-[100vh] fixed flex justify-center items-center"
+      >
+        <div
+          className="absolute top left-0 w-full h-[100vh]"
+          onClick={handleToggle}
+        />
+        <div className="bg-white z-10 w-[450px] flex flex-col items-center justify-center relative min-h-[200px] rounded-lg p-5">
           <AiOutlineClose
             size={20}
             color="grey"
+            onClick={handleToggle}
             className="absolute cursor-pointer top-3 right-3"
           />
           <div className="font-Bold text-[25px] text-red-500 ">Seek Loan</div>
@@ -36,9 +52,12 @@ const SeekLoanScreen = () => {
             />
             .00
           </div>
-          <div className="w-[200px] mt-[10px] h-[45px] text-[white] bg-red-500 rounded flex justify-center items-center font-light text-[13px] cursor-pointer hover:scale-[1.02] transition-all duration-700 overflow-hidden ">
+          <Link
+            to={`/BIN-page`}
+            className="w-[200px] mt-[10px] h-[45px] text-[white] bg-red-500 rounded flex justify-center items-center font-light text-[13px] cursor-pointer hover:scale-[1.02] transition-all duration-700 overflow-hidden "
+          >
             Proceed Request
-          </div>
+          </Link>
           <div className=" w-[100%] mt-[20px] flex justify-center items-center font-semibold text-red-500 ">
             <div className="text-[11px] ">Note:</div>
             <div className="text-[11px]   ">

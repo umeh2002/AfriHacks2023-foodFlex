@@ -1,4 +1,5 @@
 import { AiOutlineClose } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const BINpage = () => {
   const validInput = (e: any) => {
@@ -11,11 +12,13 @@ const BINpage = () => {
     <>
       <div className=" w-[100%] h-[100vh] flex justify-center items-center bg-gradient-blue-pink">
         <div className="bg-white w-[450px] flex flex-col items-center justify-center relative min-h-[200px] rounded-lg p-5">
-          <AiOutlineClose
-            size={20}
-            color="grey"
-            className="absolute cursor-pointer top-3 right-3"
-          />
+          <Link to={`/`}>
+            <AiOutlineClose
+              size={20}
+              color="grey"
+              className="absolute cursor-pointer top-3 right-3"
+            />
+          </Link>
           <div className="font-Bold text-[25px] text-red-500 ">BIN Checker</div>
           <div className="text-[11px] text-gray-500 font-medium text-center w-[80%] ">
             Our commitment to user safety reaches new heights <br /> as we

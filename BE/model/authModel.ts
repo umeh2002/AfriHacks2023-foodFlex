@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 import { iAuthData } from "../utils/interfaces";
 
 const authModel = new Schema<iAuthData>(

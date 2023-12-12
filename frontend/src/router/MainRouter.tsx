@@ -6,7 +6,6 @@ import HomePage from "../pages/HomePage";
 import CartPage from "../pages/CartPage";
 import HistoryPage from "../pages/HistoryPage";
 import BINpage from "../pages/BINpage";
-import SeekLoanScreen from "../screens/SeekLoanScreen";
 import DetailedPage from "../pages/DetailedPage";
 import PrivateRouter from "./PrivateRouter";
 
@@ -21,6 +20,10 @@ export const MainRouter = createBrowserRouter([
   },
   {
     path: "/sign-in",
+    element: <SignInPage />,
+  },
+  {
+    path: "/:token/verify",
     element: <SignInPage />,
   },
   {
@@ -52,11 +55,7 @@ export const MainRouter = createBrowserRouter([
     element: <BINpage />,
   },
   {
-    path: "/seek-loan",
-    element: <SeekLoanScreen />,
-  },
-  {
-    path: "/detailedpage",
+    path: "/detailed-page",
     element: <DetailedPage />,
   },
 ]);

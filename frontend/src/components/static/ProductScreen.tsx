@@ -1,31 +1,28 @@
-import ProductCard2 from "../ProductCard2"
-
+import { Link } from "react-router-dom";
+import ProductCard from "../ProductCard";
 
 const ProductScreen = () => {
   return (
-    <div className="w-full py-2 flex items-center justify-center ">
-    <div className="w-[90%] h-full">
-
-        <div className="w-full flex items-center justify-center">
-        <p className="text-[30px] tracking-wider text-[#808080] font-extrabold">our <span className="text-[red]">Products</span></p>
+    <div className="w-full flex bg-[#f0f1f7] min-h-[560px] py-5 items-center justify-center ">
+      <div className="w-[90%] ">
+        <center className="text-[30px] font-semibold text-gray-500">
+          <span>about</span>{" "}
+          <span className="text-red-500 font-Bold">Products</span>
+        </center>
+        <div className="w-full flex justify-center flex-wrap">
+          <ProductCard />
         </div>
-        <br />
-
-        <div className="flex justify-between flex-wrap w-[100%] md:w-[100%] md:gap-2 ">
-          <ProductCard2 />
-          <ProductCard2 />
-          <ProductCard2 />
-          <ProductCard2 />
-      </div>
-
-      <br />
-
-      <div className="w-full flex items-center justify-center ">
-      <button className="px-10 cursor-pointer hover:text-white transition-all duration-500  rounded-[20px] py-2 bg-[#fc4457] mt-2">view all</button>
+        <center className="">
+          <Link
+            to={`/sign-in`}
+            className="px-10 py-3 bg-red-500 w-[200px] rounded-full text-white"
+          >
+            View All
+          </Link>
+        </center>
       </div>
     </div>
-</div>
-  )
-}
+  );
+};
 
-export default ProductScreen
+export default ProductScreen;
