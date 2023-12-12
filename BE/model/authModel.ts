@@ -33,6 +33,12 @@ const authModel = new Schema<iAuthData>(
       default: false,
       type: Boolean,
     },
+    cart: [
+      {
+        type: Types.ObjectId,
+        ref: "carts",
+      },
+    ],
   },
   { timestamps: true }
 );

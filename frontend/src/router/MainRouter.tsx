@@ -55,7 +55,7 @@ export const MainRouter = createBrowserRouter([
     element: <BINpage />,
   },
   {
-    path: "/detailed-page",
+    path: "/detailed-page/:id",
     element: <DetailedPage />,
   },
 ]);
