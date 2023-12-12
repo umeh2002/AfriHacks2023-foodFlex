@@ -1,4 +1,4 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { iCartData } from "../utils/interfaces";
 
 const cartModel = new Schema<iCartData>(
@@ -23,9 +23,6 @@ const cartModel = new Schema<iCartData>(
       required: true,
     },
     image: {
-      type: String,
-    },
-    imageID: {
       type: String,
     },
   },

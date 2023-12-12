@@ -39,6 +39,18 @@ const authModel = new Schema<iAuthData>(
         ref: "carts",
       },
     ],
+    loan: {
+      type: Number,
+    },
+    wallet: {
+      type: Number,
+    },
+    history: [
+      {
+        type: Types.ObjectId,
+        ref: "loan-history",
+      },
+    ],
   },
   { timestamps: true }
 );
