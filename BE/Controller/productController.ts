@@ -83,3 +83,56 @@ export const deleteProducts = async (
     });
   }
 };
+
+// export const payNow = async (req: Request, res: Response) => {
+//   try {
+//     const { userID } = req.params;
+//     const { cost } = req.body;
+//     const user: any = await authModel.findById(userID);
+
+//     const params = JSON.stringify({
+//       email: user?.email,
+//       amount: parseInt(cost) * 100,
+//       userID,
+//     });
+//     const options = {
+//       hostname: "api.paystack.co",
+//       port: 443,
+//       path: "/transaction/initialize",
+//       method: "POST",
+//       headers: {
+//         Authorization:
+//           "Bearer sk_test_ec1b0ccabcb547fe0efbd991f3b64b485903c88e",
+//         "Content-Type": "application/json",
+//       },
+//     };
+
+//     const ask = https
+//       .request(options, (resp) => {
+//         let data = "";
+//         resp.on("data", (chunk) => {
+//           data += chunk;
+//         });
+
+//         resp.on("end", () => {
+//           console.log(JSON.parse(data));
+//           res.status(200).json({
+//             message: "Payment successful",
+//             data: JSON.parse(data),
+//           });
+//         });
+//       })
+
+//       .on("error", (error) => {
+//         console.error(error);
+//       });
+
+//     ask.write(params);
+//     ask.end();
+//   } catch (error: any) {
+//     return res.status(500).json({
+//       message: "error",
+//       data: error.message,
+//     });
+//   }
+// };

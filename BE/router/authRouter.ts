@@ -16,5 +16,4 @@ auth.route("/:token/verify").patch(verifyUser);
 auth.route("/:userID/view-one-user").get(viewOneUser);
 auth.route("/view-all-users").get(viewAllUser);
 auth.route("/:userID/delete").delete(deleteUser);
-
 export default auth;

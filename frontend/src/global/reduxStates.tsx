@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: "" || null,
   toggle: false,
+  count: 1 as any,
 };
 
 const reduxStates = createSlice({
@@ -18,10 +19,13 @@ const reduxStates = createSlice({
     onLogOutState: (state) => {
       state.user = null;
     },
+    onCountState: (state, { payload }) => {
+      state.count = payload;
+    },
   },
 });
 
-export const { onUserState, onToggleState, onLogOutState } =
+export const { onUserState, onToggleState, onLogOutState, onCountState } =
   reduxStates.actions;
 
 export default reduxStates.reducer;

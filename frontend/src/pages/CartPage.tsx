@@ -3,7 +3,13 @@ import Headings from "../components/Headings";
 import Logo from "../static/Logo";
 import { TbShoppingCartCopy } from "react-icons/tb";
 import MinCart from "../components/MinCart";
+import { usePopulateUsersCart } from "../hooks/customHooks";
+import { useSelector } from "react-redux";
+import { BallTriangle } from "react-loader-spinner";
+
 const CartPage = () => {
+  const user = useSelector((state: any) => state.user);
+  const { data, isLoading } = usePopulateUsersCart(user);
   return (
     <>
       <div className="w-full items-center flex flex-col justify-center min-h-[100vh] bg-[#e7f6ff]">
@@ -22,16 +28,37 @@ const CartPage = () => {
           </div>
           {/*Cart Header*/}
           <div className="flex justify-center flex-wrap">
-            <MinCart />
-            <MinCart />
-            <MinCart />
-            <MinCart />
+            {isLoading ? (
+              <div className="w-full S900:flex hidden justify-center items-center">
+                <BallTriangle color="red" />
+              </div>
+            ) : data?.length === 0 ? (
+              <center className="mt-5 S900:flex hidden text-red-500 font-Bold text-[30px]">
+                Empty Cart
+              </center>
+            ) : (
+              data?.map((el: any) => {
+                return <MinCart key={el?._id} el={el} />;
+              })
+            )}
           </div>
           <div className="w-full p-2 S900:hidden">
             <div className="border-[1px] text-[13px] min-h-[100px] border-[#e7e4e4] border-b-[0] rounded-lg w-full">
               <div className="flex flex-col">
                 <Headings />
-                <Carts />
+                {isLoading ? (
+                  <div className="w-full flex justify-center items-center">
+                    <BallTriangle color="red" />
+                  </div>
+                ) : data?.length === 0 ? (
+                  <center className="mt-5 text-red-500 font-Bold text-[30px]">
+                    Empty Cart
+                  </center>
+                ) : (
+                  data?.map((el: any) => {
+                    return <Carts key={el?._id} el={el} />;
+                  })
+                )}
               </div>
             </div>
           </div>
