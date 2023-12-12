@@ -1,6 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import DetailedProfile from "../components/DetailedProfile";
 import Loans from "../components/Loans";
+import { Link } from "react-router-dom";
 
 const HistoryPage = () => {
   return (
@@ -12,10 +13,12 @@ const HistoryPage = () => {
             {/* */}
             <div className="flex text-gray-500 justify-between items-center ">
               <div className="font-semibold ">Loan History*</div>
-              <AiOutlineClose size={20} className="cursor-pointer" />
+              <Link to={`/home`}>
+                <AiOutlineClose size={20} className="cursor-pointer" />
+              </Link>
             </div>
             {/* */}
-            <div className="w-full text-gray-500 text-[12px] px-2 flex items-center  border h-[30px] rounded mt-1">
+            <div className="w-full text-gray-500 text-[12px] S425:text-[9px] px-2 flex items-center  border h-[30px] rounded mt-1">
               <div className="w-[10%]">S/N</div>
               <div className="w-[20%]">NGN</div>
               <div className="w-[25%]">Status</div>

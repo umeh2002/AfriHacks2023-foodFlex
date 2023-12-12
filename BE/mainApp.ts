@@ -3,11 +3,12 @@ import { Application, Request, Response, json } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import auth from "./router/authRouter";
+import products from "./router/productsRouter";
 
 export const appConfig = (app: Application) => {
   app.use(json()).use(cors()).use(helmet()).use(morgan("dev"));
   app.set("view engine", "ejs");
-  app.use("/api", auth);
+  app.use("/api", auth, products);
 
   app.get("/", (req: Request, res: Response) => {
     try {

@@ -6,8 +6,8 @@ import HomePage from "../pages/HomePage";
 import CartPage from "../pages/CartPage";
 import HistoryPage from "../pages/HistoryPage";
 import BINpage from "../pages/BINpage";
-import SeekLoanScreen from "../screens/SeekLoanScreen";
 import DetailedPage from "../pages/DetailedPage";
+import PrivateRouter from "./PrivateRouter";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -23,27 +23,39 @@ export const MainRouter = createBrowserRouter([
     element: <SignInPage />,
   },
   {
+    path: "/:token/verify",
+    element: <SignInPage />,
+  },
+  {
     path: "/home",
-    element: <HomePage />,
+    element: (
+      <PrivateRouter>
+        <HomePage />
+      </PrivateRouter>
+    ),
   },
   {
     path: "/cart-page",
-    element: <CartPage />,
+    element: (
+      <PrivateRouter>
+        <CartPage />
+      </PrivateRouter>
+    ),
   },
   {
     path: "/history-page",
-    element: <HistoryPage />,
+    element: (
+      <PrivateRouter>
+        <HistoryPage />
+      </PrivateRouter>
+    ),
   },
   {
     path: "/BIN-page",
     element: <BINpage />,
   },
   {
-    path: "/seek-loan",
-    element: <SeekLoanScreen />,
-  },
-  {
-    path: "/detailedpage",
+    path: "/detailed-page",
     element: <DetailedPage />,
   },
 ]);

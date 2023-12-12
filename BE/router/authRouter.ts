@@ -12,7 +12,7 @@ const auth: Router = Router();
 
 auth.route("/register").post(registerUser);
 auth.route("/sign-in").post(signInUser);
-auth.route("/:token/verify").get(verifyUser);
+auth.route("/:token/verify").patch(verifyUser);
 auth.route("/:userID/view-one-user").get(viewOneUser);
 auth.route("/view-all-users").get(viewAllUser);
 auth.route("/:userID/delete").delete(deleteUser);

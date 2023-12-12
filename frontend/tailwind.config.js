@@ -11,7 +11,10 @@ export default {
         S425: { max: "425px" },
         S670: { max: "670px" },
         S500: { max: "500px" },
+        S530: { max: "530px" },
         S900: { max: "900px" },
+        S1000: { max: "1000px" },
+        S1200: { max: "1200px" },
       },
       backgroundImage: {
         "gradient-blue-pink":

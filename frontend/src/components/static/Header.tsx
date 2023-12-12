@@ -1,16 +1,37 @@
-
+import { AiFillBank } from "react-icons/ai";
+import Logo from "../../static/Logo";
+import { useDispatch, useSelector } from "react-redux";
+import { onToggleState } from "../../global/reduxStates";
+import SeekLoanScreen from "../../screens/SeekLoanScreen";
 
 const Header = () => {
-  return (
-    <div className="w-full h-[60px] flex items-center justify-center ">
-        <div className="w-[90%] h-full flex items-center justify-between">
-            <div>
-                <p className="text-[30px] font-semibold text-white">FoodFlex</p>
-            </div>
-            <button className="px-5 py-2 rounded-[20px] text-[13px] text-[#e97782] font-semibold border-[1px] border-[#e97782] bg-white hover:bg-[#e97782] hover:border-white transition-all duration-500 translate-x-(0.01) hover:text-white">Request for loan</button>
-        </div>
-    </div>
-  )
-}
+  const toggle = useSelector((state: any) => state.toggle);
+  const dispatch = useDispatch();
 
-export default Header
+  const onHandleToggleState = () => {
+    dispatch(onToggleState(!toggle));
+  };
+  return (
+    <>
+      {toggle && <SeekLoanScreen handleToggle={onHandleToggleState} />}
+      <div className="w-full h-[60px] flex items-center justify-center ">
+        <div className="w-[85%] h-full flex items-center justify-between">
+          <Logo clr="white" />
+          <AiFillBank
+            color="white"
+            size={40}
+            className="cursor-pointer hidden S500:flex"
+          />
+          <button
+            onClick={onHandleToggleState}
+            className="px-10 py-3 S500:hidden rounded-full border-rose-500 border text-red-500 duration-500 hover:scale-[1.02] bg-white"
+          >
+            Request for loan
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Header;

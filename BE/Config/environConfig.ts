@@ -9,4 +9,7 @@ export const envConfig = {
   GOOGLE_URL: process.env.GOOGLE_URL!,
   GOOGLE_REFRESH: process.env.GOOGLE_REFRESH!,
   TOKEN_SECRET: process.env.TOKEN_SECRET!,
+  CLOUD_NAME: process.env.CLOUD_NAME!,
+  API_KEY: process.env.API_KEY!,
+  API_SECRET: process.env.API_SECRET!,
 };
