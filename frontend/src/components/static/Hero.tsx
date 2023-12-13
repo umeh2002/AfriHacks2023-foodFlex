@@ -18,9 +18,9 @@ const Hero = () => {
           </p>
           <div className="mt-5">
             <div className="flex justify-center">
-              <button className="px-10 hidden S500:flex mr-5 S500:m-1 py-3 rounded-full  text-white duration-500 hover:scale-[1.02] bg-red-500">
+              <Link to={`/register`} className="px-10 hidden S500:flex mr-5 S500:m-1 py-3 rounded-full  text-white duration-500 hover:scale-[1.02] bg-red-500">
                 Join
-              </button>
+              </Link>
             </div>
             <Link
               to={`/register`}

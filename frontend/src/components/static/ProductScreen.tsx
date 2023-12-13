@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import ProductCard from "../ProductCard";
+import { useViewAllProducts } from "../../hooks/customHooks";
 
 const ProductScreen = () => {
+  const { data } = useViewAllProducts();
+  const datas = data?.slice(0, 4);
   return (
     <div className="w-full flex bg-[#f0f1f7] min-h-[560px] py-5 items-center justify-center ">
       <div className="w-[90%] ">
@@ -10,8 +13,11 @@ const ProductScreen = () => {
           <span className="text-red-500 font-Bold">Products</span>
         </center>
         <div className="w-full flex justify-center flex-wrap">
-          <ProductCard />
+          {datas?.map((props: any) => (
+            <ProductCard props={props} key={props?._id} />
+          ))}
         </div>
+        <br />
         <center className="">
           <Link
             to={`/sign-in`}
