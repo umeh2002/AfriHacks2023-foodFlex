@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
-
+import PrivateRouter from "../router/PrivateRouter";
 interface iToggle {
   handleToggle: any;
 }
@@ -19,52 +19,54 @@ const SeekLoanScreen: FC<iToggle> = ({ handleToggle }) => {
         style={{
           backgroundColor: "rgba(107, 34, 34, 0.5)",
         }}
-        className="w-[100%] h-[100vh] fixed flex justify-center items-center"
+        className="w-[100%] h-[100vh] top-0 fixed flex justify-center items-center"
       >
-        <div
-          className="absolute top left-0 w-full h-[100vh]"
-          onClick={handleToggle}
-        />
-        <div className="bg-white z-10 w-[450px] flex flex-col items-center justify-center relative min-h-[200px] rounded-lg p-5">
-          <AiOutlineClose
-            size={20}
-            color="grey"
+        <PrivateRouter>
+          <div
+            className="absolute top left-0 w-full h-[100vh]"
             onClick={handleToggle}
-            className="absolute cursor-pointer top-3 right-3"
           />
-          <div className="font-Bold text-[25px] text-red-500 ">Seek Loan</div>
-          <div className="text-[11px] text-gray-500 font-medium text-center w-[80%] ">
-            Navigating the Food Flex App, users seelessly explore loan options,
-            turniong grocerys shoping into a stress-free, personalized
-            experienced that blends financial flexibility with culinary
-            convinence.
-          </div>
-          <div className="mt-[15px] font-Bold text-gray-500 text-[13px] text-center">
-            LOAN AMOUNT CREDENTIAL
-          </div>
-          <div className="w-[200px] flex justify-center items-center text-[20px] text-gray-500 h-[50px] border rounded-md">
-            ₦{" "}
-            <input
-              type="text"
-              onInput={validInput}
-              maxLength={5}
-              className="w-[70%] h-[40px] outline-none pl-3"
+          <div className="bg-white z-10 w-[450px] flex flex-col items-center justify-center relative min-h-[200px] rounded-lg p-5">
+            <AiOutlineClose
+              size={20}
+              color="grey"
+              onClick={handleToggle}
+              className="absolute cursor-pointer top-3 right-3"
             />
-            .00
-          </div>
-          <Link
-            to={`/BIN-page`}
-            className="w-[200px] mt-[10px] h-[45px] text-[white] bg-red-500 rounded flex justify-center items-center font-light text-[13px] cursor-pointer hover:scale-[1.02] transition-all duration-700 overflow-hidden "
-          >
-            Proceed Request
-          </Link>
-          <div className=" w-[100%] mt-[20px] flex justify-center items-center font-semibold text-red-500 ">
-            <div className="text-[11px] ">Note:</div>
-            <div className="text-[11px]   ">
-              You can only borrow up to ₦50,000.00
+            <div className="font-Bold text-[25px] text-red-500 ">Seek Loan</div>
+            <div className="text-[11px] text-gray-500 font-medium text-center w-[80%] ">
+              Navigating the Food Flex App, users seelessly explore loan
+              options, turniong grocerys shoping into a stress-free,
+              personalized experienced that blends financial flexibility with
+              culinary convinence.
+            </div>
+            <div className="mt-[15px] font-Bold text-gray-500 text-[13px] text-center">
+              LOAN AMOUNT CREDENTIAL
+            </div>
+            <div className="w-[200px] flex justify-center items-center text-[20px] text-gray-500 h-[50px] border rounded-md">
+              ₦{" "}
+              <input
+                type="text"
+                onInput={validInput}
+                maxLength={5}
+                className="w-[70%] h-[40px] outline-none pl-3"
+              />
+              .00
+            </div>
+            <Link
+              to={`/BIN-page`}
+              className="w-[200px] mt-[10px] h-[45px] text-[white] bg-red-500 rounded flex justify-center items-center font-light text-[13px] cursor-pointer hover:scale-[1.02] transition-all duration-700 overflow-hidden "
+            >
+              Proceed Request
+            </Link>
+            <div className=" w-[100%] mt-[20px] flex justify-center items-center font-semibold text-red-500 ">
+              <div className="text-[11px] ">Note:</div>
+              <div className="text-[11px]   ">
+                You can only borrow up to ₦50,000.00
+              </div>
             </div>
           </div>
-        </div>
+        </PrivateRouter>
       </div>
     </>
   );

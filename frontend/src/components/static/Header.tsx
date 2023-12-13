@@ -18,6 +18,7 @@ const Header = () => {
         <div className="w-[85%] h-full flex items-center justify-between">
           <Logo clr="white" />
           <AiFillBank
+            onClick={onHandleToggleState}
             color="white"
             size={40}
             className="cursor-pointer hidden S500:flex"
